@@ -36,11 +36,11 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const initialCourseState: ControllersCourse = {
+const initialCourseState = {
     coursename: "",
-    degree: undefined,
-    faculty: undefined,
-    institution: undefined
+    degree: '',
+    faculty: '',
+    institution: ''
 };
 
 const initialCourseValidate = {
@@ -54,7 +54,7 @@ const CreateCoursePage = () => {
     const api = new DefaultApi();
 
 
-    const [course, setCourse] = useState<ControllersCourse>(initialCourseState);
+    const [course, setCourse] = useState(initialCourseState);
     const [degree, setDegree] = useState<EntDegree[]>([]);
     const [faculties, setFaculties] = useState<EntFaculty[]>([]);
     const [institutions, setInstitutions] = useState<EntInstitution[]>([]);
@@ -110,7 +110,12 @@ const CreateCoursePage = () => {
         checkValidateData()
         if (validateCourseData()) {
             let createCourseRequest: CreateCourseRequest = {
-                course: { ...course }
+                course: {
+                    coursename: course.coursename,
+                    degree: Number(course.degree),
+                    faculty: Number(course.faculty),
+                    institution: Number(course.institution)
+                }
             }
             try {
                 await api.createCourseRaw(createCourseRequest)
