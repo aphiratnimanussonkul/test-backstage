@@ -19,7 +19,7 @@ export const AppSidebar = () => (
     {/* Global nav, not org-specific */}
     <SidebarItem icon={HomeIcon} to="./" text="Home" />
     <SidebarItem icon={BookOutlined} to="./create-course" text="บันทึกข้อมูลหลักสูตร" />
-    <SidebarItem icon={SearchOutlined} to="./search-course" text="ค้นหาหลักสูตร" />
+    <SidebarItem icon={SearchOutlined} to="./search-course" text="ข้อมูลหลักสูตร" />
     <SidebarItem icon={CreateComponentIcon} to="welcome" text="Welcome" />
     {/* End global nav */}
     <SidebarDivider />
