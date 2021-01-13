@@ -58,14 +58,18 @@ const useStyles = makeStyles((theme) => ({
 const SearchCoursePage = () => {
     const classes = useStyles();
     const [courses, setCourses] = useState<EntCourse[]>([])
+    const [searchText, setSearchText] = useState("")
     const api = new DefaultApi();
     useEffect(() => {
         getCourses()
     }, [])
     const getCourses = async () => {
         let coursesResponse: EntCourse[] = await api.listCourse({})
-        console.log(coursesResponse)
         setCourses(coursesResponse)
+    }
+
+    const onSearchTextChange = (e: any) => {
+        setSearchText(e.target.value)
     }
     return <>
         <Page theme={pageTheme.home}>
@@ -82,6 +86,8 @@ const SearchCoursePage = () => {
                                 <SearchIcon />
                             </div>
                             <InputBase
+                                onChange={onSearchTextChange}
+                                value={searchText}
                                 placeholder="ชื่อหลักสูตร / ระดับปริญญา / สำนักวิชา / สาขาวิชา"
                                 classes={{
                                     root: classes.inputRoot,
@@ -97,21 +103,29 @@ const SearchCoursePage = () => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell align="center">No.</TableCell>
-                                    <TableCell align="center">Course Name</TableCell>
-                                    <TableCell align="center">Degree</TableCell>
-                                    <TableCell align="center">Faculty</TableCell>
-                                    <TableCell align="center">Institution</TableCell>
+                                    <TableCell >Course Name</TableCell>
+                                    <TableCell >Degree</TableCell>
+                                    <TableCell >Faculty</TableCell>
+                                    <TableCell >Institution</TableCell>
                                 </TableRow>
                             </TableHead>
 
                             <TableBody>
-                                {courses.map(item => (
+                                {courses.filter(item => {
+                                    if (searchText != "") {
+                                        return item.course?.includes(searchText) ||
+                                            item.edges?.courFacu?.faculty?.includes(searchText) ||
+                                            item.edges?.courDegr?.degree?.includes(searchText) ||
+                                            item.edges?.courInst?.institution?.includes(searchText)
+                                    }
+                                    return true
+                                }).map((item, index) => (
                                     <TableRow key={item.id}>
-                                        <TableCell align="center">{item.id}</TableCell>
-                                        <TableCell align="center">{item.course}</TableCell>
-                                        <TableCell align="center">{item.edges?.courDegr?.degree}</TableCell>
-                                        <TableCell align="center">{item.edges?.courFacu?.faculty}</TableCell>
-                                        <TableCell align="center">{item.edges?.courInst?.institution}</TableCell>
+                                        <TableCell align="center">{index + 1}</TableCell>
+                                        <TableCell >{item.course}</TableCell>
+                                        <TableCell >{item.edges?.courDegr?.degree}</TableCell>
+                                        <TableCell >{item.edges?.courFacu?.faculty}</TableCell>
+                                        <TableCell >{item.edges?.courInst?.institution}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
