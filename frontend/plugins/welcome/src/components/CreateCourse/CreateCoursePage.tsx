@@ -8,7 +8,7 @@ import {
 } from '@backstage/core';
 import { Alert } from '@material-ui/lab';
 import { makeStyles, createStyles, Theme, FormControl, TextField, Button, Select, MenuItem, InputLabel, FormHelperText } from '@material-ui/core';
-import { DefaultApi, EntDegree, EntInstitution, EntFaculty, CreateCourseRequest, ControllersCourse, } from '../../api';
+import { DefaultApi, EntDegree, EntInstitution, EntFaculty, CreateCourseRequest } from '../../api';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -16,7 +16,9 @@ const useStyles = makeStyles((theme: Theme) =>
             flexWrap: 'wrap',
             justifyContent: 'center',
         },
-
+        select: {
+            width: 500
+        },
         margin: {
             margin: theme.spacing(2),
         },
@@ -26,12 +28,19 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'center'
         },
 
+        column: {
+            flexDirection: "column",
+            display: 'flex',
+            justifyContent: 'center'
+        },
+
         withoutLabel: {
             marginTop: theme.spacing(3),
         },
 
         textField: {
-            width: '25ch',
+            margin: theme.spacing(2),
+            width: 500
         },
     }),
 );
@@ -146,14 +155,14 @@ const CreateCoursePage = () => {
     const checkValidateData = () => {
         setCourseValidate({
             coursename: course.coursename == "",
-            degree: course.degree == undefined,
-            faculty: course.faculty == undefined,
-            institution: course.institution == undefined
+            degree: course.degree == "",
+            faculty: course.faculty == "",
+            institution: course.institution == ""
         })
     }
 
     const validateCourseData = () => {
-        return course.coursename != "" && course.degree != undefined && course.faculty != undefined && course.institution != undefined
+        return course.coursename != "" && course.degree != '' && course.faculty != '' && course.institution != ''
     }
     return <>
         <Page theme={pageTheme.home}>
@@ -176,10 +185,10 @@ const CreateCoursePage = () => {
                     </div>) : null}
 
                 <div className={classes.root}>
-                    <form autoComplete="off">
+                    <form autoComplete="off" className={classes.column}>
                         <FormControl
                             fullWidth
-                            className={classes.margin}
+                            className={classes.textField}
                             variant="outlined"
                         >
                             <TextField
@@ -199,8 +208,7 @@ const CreateCoursePage = () => {
 
                         <FormControl
                             error={courseValidate.degree}
-                            fullWidth
-                            className={classes.margin}
+                            className={`${classes.margin} ${classes.select}`}
                             variant="outlined">
                             <InputLabel >Degree</InputLabel>
                             <Select
@@ -220,8 +228,7 @@ const CreateCoursePage = () => {
                         </FormControl>
 
                         <FormControl
-                            fullWidth
-                            className={classes.margin}
+                            className={`${classes.margin} ${classes.select}`}
                             error={courseValidate.faculty}
                             variant="outlined">
                             <InputLabel >Faculty</InputLabel>
@@ -242,9 +249,8 @@ const CreateCoursePage = () => {
                         </FormControl>
 
                         <FormControl
-                            fullWidth
+                            className={`${classes.margin} ${classes.select}`}
                             error={courseValidate.institution}
-                            className={classes.margin}
                             variant="outlined">
                             <InputLabel >Institution</InputLabel>
                             <Select
