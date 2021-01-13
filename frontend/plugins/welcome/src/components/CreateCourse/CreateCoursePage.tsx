@@ -166,11 +166,11 @@ const CreateCoursePage = () => {
                     <div>
                         {saveResult ? (
                             <Alert severity="success">
-                                This is a success alert — check it out!
+                                บันทึกข้อมูลหลักสูตรสำเร็จ
                             </Alert>
                         ) : (
-                                <Alert severity="warning" style={{ marginTop: 20 }}>
-                                    This is a warning alert — check it out!
+                                <Alert severity="error">
+                                    ไม่สามารถบันทึกข้อมูลหลักสูตรได้ กรุณาลองใหม่ภายหลัง
                                 </Alert>
                             )}
                     </div>) : null}
