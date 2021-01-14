@@ -59,7 +59,8 @@ type Facultys struct {
 }
 
 type Faculty struct {
-	Faculty string
+	Faculty      string
+	institutions []Institution
 }
 
 type Professorships struct {
@@ -343,26 +344,6 @@ func main() {
 			Save(context.Background())
 	}
 
-	// Set Faculty Data
-	facultys := Facultys{
-		Faculty: []Faculty{
-			Faculty{"สำนักวิชาวิทยาศาสตร์"},
-			Faculty{"สำนักวิชาเทคโนโลยีสังคม"},
-			Faculty{"สำนักวิชาเทคโนโลยีการเกษตร"},
-			Faculty{"สำนักวิชาวิศวกรรมศาสตร์"},
-			Faculty{"สำนักวิชาแพทยศาสตร์"},
-			Faculty{"สำนักวิชาพยาบาลศาสตร์"},
-			Faculty{"สำนักวิชาทันตแพทยศาสตร์"},
-			Faculty{"สำนักวิชาสาธารณสุขศาสตร์"},
-		},
-	}
-	for _, fa := range facultys.Faculty {
-		client.Faculty.
-			Create().
-			SetFaculty(fa.Faculty).
-			Save(context.Background())
-	}
-
 	// Set Professorship Data
 	professorships := Professorships{
 		Professorship: []Professorship{
@@ -395,30 +376,60 @@ func main() {
 			Save(context.Background())
 	}
 
-	// Set Institution Data
-	institutions := Institutions{
-		Institution: []Institution{
-			Institution{"สาขาวิชาเคมี"},
-			Institution{"สาขาวิชาคณิตศาสตร์"},
-			Institution{"สาขาวิชาวิศวกรรมคอมพิวเตอร์"},
-			Institution{"สาขาวิชาวิศวกรรมเครื่องกล"},
-			Institution{"สาขาวิชาวิศวกรรมโยธา"},
-			Institution{"สาขาวิชาวิศวกรรมไฟฟ้า"},
-			Institution{"สาขาวิชาเทคโนโลยีการจัดการ"},
-			Institution{"สาขาวิชาเทคโนโลยีอาหาร"},
-			Institution{"สาขาวิชาแพทยศาสตรบัณฑิต"},
-			Institution{"สาขาวิชาพยาบาลศาสตรบัณฑิต"},
-			Institution{"สาขาวิชาทันตแพทยศาสตรบัณฑิต"},
-			Institution{"สาขาวิชาอาชีวอนามัยและความปลอดภัย"},
-			Institution{"สาขาวิชาอนามัยสิ่งแวดล้อม"},
+	// Set Faculty Data
+	facultys := Facultys{
+		Faculty: []Faculty{
+			Faculty{
+				"สำนักวิชาวิทยาศาสตร์",
+				[]Institution{
+					Institution{"สาขาวิชาเคมี"},
+					Institution{"สาขาวิชาคณิตศาสตร์"},
+					Institution{"สาขาวิชาวิศวกรรมคอมพิวเตอร์"},
+					Institution{"สาขาวิชาวิศวกรรมเครื่องกล"},
+					Institution{"สาขาวิชาวิศวกรรมโยธา"},
+					Institution{"สาขาวิชาวิศวกรรมไฟฟ้า"},
+					Institution{"สาขาวิชาเทคโนโลยีการจัดการ"},
+					Institution{"สาขาวิชาเทคโนโลยีอาหาร"},
+					Institution{"สาขาวิชาแพทยศาสตรบัณฑิต"},
+					Institution{"สาขาวิชาพยาบาลศาสตรบัณฑิต"},
+					Institution{"สาขาวิชาทันตแพทยศาสตรบัณฑิต"},
+					Institution{"สาขาวิชาอาชีวอนามัยและความปลอดภัย"},
+					Institution{"สาขาวิชาอนามัยสิ่งแวดล้อม"},
+				},
+			},
+			Faculty{"สำนักวิชาเทคโนโลยีสังคม", []Institution{}},
+			Faculty{"สำนักวิชาเทคโนโลยีการเกษตร", []Institution{}},
+			Faculty{"สำนักวิชาวิศวกรรมศาสตร์", []Institution{}},
+			Faculty{"สำนักวิชาแพทยศาสตร์", []Institution{}},
+			Faculty{"สำนักวิชาพยาบาลศาสตร์", []Institution{}},
+			Faculty{"สำนักวิชาทันตแพทยศาสตร์", []Institution{}},
+			Faculty{"สำนักวิชาสาธารณสุขศาสตร์", []Institution{}},
 		},
 	}
-	for _, in := range institutions.Institution {
-		client.Institution.
+
+	for _, fa := range facultys.Faculty {
+		facu, _ := client.Faculty.
 			Create().
-			SetInstitution(in.Institution).
+			SetFaculty(fa.Faculty).
 			Save(context.Background())
+		for _, in := range fa.institutions {
+			client.Institution.
+				Create().
+				SetInstitution(in.Institution).
+				SetInstFacu(facu).
+				Save(context.Background())
+		}
 	}
+
+	// // Set Institution Data
+
+	// for _, in := range institutions.Institution {
+	// 	client.Institution.
+	// 		Create().
+	// 		SetInstitution(in.Institution).
+	// 		SetInstFacu()
+	// 		Save(context.Background())
+	// }
 
 	// Set degree Data
 	degrees := Degrees{

@@ -81,6 +81,7 @@ func (ctl *InstitutionController) ListInstitution(c *gin.Context) {
 
 	institutions, err := ctl.client.Institution.
 		Query().
+		WithInstFacu().
 		Limit(limit).
 		Offset(offset).
 		All(context.Background())
