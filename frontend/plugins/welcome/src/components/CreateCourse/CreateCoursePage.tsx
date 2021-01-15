@@ -260,7 +260,7 @@ const CreateCoursePage = () => {
                                 value={course.institution}
                                 onChange={handleInstitutionChange}
                             >
-                                {institutions.map((item, key) => (
+                                {institutions.filter((inst) => inst.edges?.instFacu?.id == Number(course.faculty)).map((item, key) => (
                                     <MenuItem key={key} value={item.id}>
                                         {item.institution}
                                     </MenuItem>
