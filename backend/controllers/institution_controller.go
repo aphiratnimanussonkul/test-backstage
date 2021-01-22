@@ -61,15 +61,6 @@ func (ctl *InstitutionController) GetInstitution(c *gin.Context) {
 // @Failure 500 {object} gin.H
 // @Router /institutions [get]
 func (ctl *InstitutionController) ListInstitution(c *gin.Context) {
-	limitQuery := c.Query("limit")
-	limit := 8
-	if limitQuery != "" {
-		limit64, err := strconv.ParseInt(limitQuery, 8, 64)
-		if err == nil {
-			limit = int(limit64)
-		}
-	}
-
 	offsetQuery := c.Query("offset")
 	offset := 0
 	if offsetQuery != "" {
@@ -82,7 +73,6 @@ func (ctl *InstitutionController) ListInstitution(c *gin.Context) {
 	institutions, err := ctl.client.Institution.
 		Query().
 		WithInstFacu().
-		Limit(limit).
 		Offset(offset).
 		All(context.Background())
 
