@@ -92,13 +92,12 @@ const SearchCoursePage = () => {
       item.edges?.courFacu?.faculty?.includes(searchText) ||
       item.edges?.courDegr?.degree?.includes(searchText) ||
       item.edges?.courInst?.institution?.includes(searchText);
-    console.log(found);
-    setIsFound(found);
     return found;
   };
 
   const onSearchCourse = () => {
     let temp = courses.filter(item => checkIsFound(item));
+    setIsFound(temp.length > 0);
     setFilterCourse(temp);
   };
 
