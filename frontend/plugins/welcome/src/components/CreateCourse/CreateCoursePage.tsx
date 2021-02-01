@@ -79,7 +79,7 @@ const CreateCoursePage = () => {
   const [faculties, setFaculties] = useState<EntFaculty[]>([]);
   const [institutions, setInstitutions] = useState<EntInstitution[]>([]);
   const [courseValidate, setCourseValidate] = useState(initialCourseValidate);
-
+  const [courseNameError, setCourseNameError] = useState<boolean>(false);
   const [alert, setAlert] = useState(false);
   const [saveResult, setSaveResult] = useState(false);
 
@@ -106,6 +106,13 @@ const CreateCoursePage = () => {
 
   const handleInputChange = (e: any) => {
     const { coursename, ...other } = course;
+    let regExp = /ปริญญา+/i;
+    let newCourseName = e.target.value;
+    if (newCourseName && !newCourseName.match(regExp)) {
+      setCourseNameError(true);
+    } else {
+      setCourseNameError(false);
+    }
     setCourse({ ...other, coursename: e.target.value });
   };
 
@@ -211,9 +218,13 @@ const CreateCoursePage = () => {
                   type="string"
                   size="medium"
                   helperText={
-                    courseValidate.coursename ? 'กรุณาระบุชื่อหลักสูตร' : null
+                    courseNameError
+                      ? 'ชื่อหลักสูตรไม่ถูกต้อง ต้องขึ้นตัวด้วยคำว่า ปริญญา'
+                      : courseValidate.coursename
+                      ? 'กรุณาระบุชื่อหลักสูตร'
+                      : null
                   }
-                  error={courseValidate.coursename}
+                  error={courseNameError || courseValidate.coursename}
                   value={course.coursename}
                   onChange={handleInputChange}
                 />
