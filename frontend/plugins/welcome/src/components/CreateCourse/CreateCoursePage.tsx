@@ -106,13 +106,6 @@ const CreateCoursePage = () => {
 
   const handleInputChange = (e: any) => {
     const { coursename, ...other } = course;
-    let regExp = /ปริญญา+/i;
-    let newCourseName = e.target.value;
-    if (newCourseName && !newCourseName.match(regExp)) {
-      setCourseNameError(true);
-    } else {
-      setCourseNameError(false);
-    }
     setCourse({ ...other, coursename: e.target.value });
   };
 
@@ -177,8 +170,15 @@ const CreateCoursePage = () => {
   };
 
   const validateCourseData = () => {
+    let regExp = /ปริญญา+/i;
+    if (course.coursename && !course.coursename.match(regExp)) {
+      setCourseNameError(true);
+    } else {
+      setCourseNameError(false);
+    }
     return (
       course.coursename != '' &&
+      course.coursename.match(regExp) &&
       course.degree != '' &&
       course.faculty != '' &&
       course.institution != ''
